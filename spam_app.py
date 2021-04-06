@@ -11,38 +11,11 @@ import pickle
 from keras import backend as K
 import base64
 import streamlit.components.v1 as components
-
-# LOGO_IMAGE = "logo.jpg"
-
-# st.markdown(
-#     """
-#     <style>
-#     .container {
-#         display: flex;
-#     }
-#     .logo-text {
-#         font-weight:700 !important;
-#         font-size:50px !important;
-#         color: #f9a01b !important;
-#         padding-top: 75px !important;
-#     }
-#     .logo-img {
-#         float:right;
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
-
-# st.markdown(
-#     f"""
-#     <div class="container">
-#         <img class="logo-img" src="data:image/jpg;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
-#         <p class="logo-text">Logo Much ?</p>
-#     </div>
-#     """,
-#     unsafe_allow_html=True
-# )
+from lime.lime_text import LimeTextExplainer
+from lime.lime_tabular import LimeTabularExplainer
+import numpy as np
+from sklearn.pipeline import make_pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 @st.cache(allow_output_mutation=True)
@@ -52,11 +25,11 @@ def load_model():
     model.summary()  # included to make it visible when model is reloaded
     return model
 
-class_ids = ['spam', 'not spam']
 max_length = 10
-st.write ('# Ashanti\'s Spam Detection App')
 
-message_text = st.text_input("Enter a message for spam evaluation")
+st.write ('# Spam Detection App')
+
+message_text = st.text_input("Enter a text message or email for spam evaluation")
 
 tokenizer = pickle.load(open('tokenizer.pkl', 'rb'))
 model = tf.keras.models.load_model('spam_model')
@@ -73,6 +46,6 @@ def spam_check(model, sms):
   return pred
 
 if message_text != '':
-    result = spam_check(model, message_text)
-    st.write(result)
-
+    with st.spinner('Generating explanations'):
+        result = spam_check(model, message_text)
+        st.write(result)
