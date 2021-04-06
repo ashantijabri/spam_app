@@ -1,21 +1,8 @@
 import tensorflow as tf
-import keras
 from tensorflow.keras.models import load_model
 import streamlit as st
-import re
-from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.layers import Embedding
 import pickle
-from keras import backend as K
-import base64
-import streamlit.components.v1 as components
-from lime.lime_text import LimeTextExplainer
-from lime.lime_tabular import LimeTabularExplainer
-import numpy as np
-from sklearn.pipeline import make_pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 @st.cache(allow_output_mutation=True)
